@@ -1,9 +1,12 @@
-## library() calls go here
 library(conflicted)
 library(dotenv)
 library(targets)
 library(tarchetypes)
-library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(readr)
+library(forcats)
 library(ggtext)
 
 conflicted::conflicts_prefer(dplyr::filter)
