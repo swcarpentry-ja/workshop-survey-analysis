@@ -1,15 +1,14 @@
-## Load your packages, e.g. library(targets).
+# Load packages
 source("./packages.R")
 
-## Load your R files
+# Load functions
 lapply(list.files("./R", full.names = TRUE), source)
 
 tar_option_set(
   workspace_on_error = TRUE
 )
 
-
-## tar_plan supports drake-style targets and also tar_target()
+# Plan
 tar_plan(
   tar_file_read(
     pre_raw,
@@ -23,16 +22,29 @@ tar_plan(
   ),
   pre_clean = clean_survey(pre_raw),
   post_clean = clean_survey(post_raw),
-  comp_plot = create_comp_plot(pre_clean, post_clean),
+  combined = combine_pre_post(pre_clean, post_clean),
+  comp_bar_plot = create_comp_bar_plot(combined),
+  comp_line_plot = create_comp_line_plot(combined),
   tar_file(
-    comp_plot_file,
+    comp_bar_plot_out,
     ggsave_tar(
-      filename = "2024-05-30_chiba_survey.png",
-      plot = comp_plot,
+      filename = "2024-05-30_chiba_survey_comp_bar.png",
+      plot = comp_bar_plot,
       path = "results/",
       height = 29.7,
       width = 20,
       units = "cm"
     )
-  )
+  ),
+  tar_file(
+    comp_line_plot_out,
+    ggsave_tar(
+      filename = "2024-05-30_chiba_survey_comp_line.png",
+      plot = comp_line_plot,
+      path = "results/",
+      height = 29.7,
+      width = 20,
+      units = "cm"
+    )
+  ),
 )
